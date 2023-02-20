@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  prisma_migrate:
+    container_name: prisma_migrate
+    build:
+      context: .
+      dockerfile: ./prisma/Dockerfile
+      target: migration
+    command: yarn migrate:dev
+    env_file:
+      - db.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - database
+
+  database:
+    image: mysql:latest
+    container_name: mysql_nest
+    ports:
+      - '3306:3306'
+    env_file:
+      - db.env
+    volumes:
+      - mysql_nest_v:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql_nest_v:
+    name: mysql_nest_v

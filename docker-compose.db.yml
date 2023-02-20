@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  database:
+    image: mysql:latest
+    container_name: mysql_nest
+    ports:
+      - '3306:3306'
+    env_file:
+      - db.env
+    volumes:
+      - mysql_nest_v:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql_nest_v:
+    name: mysql_nest_v

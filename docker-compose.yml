@@ -1,0 +1,52 @@
+version: '3.8'
+
+services:
+  gateway:
+    container_name: gateway
+    build:
+      context: .
+      dockerfile: apps/gateway/Dockerfile
+      target: build
+    command: yarn start:dev gateway
+    ports:
+      - '3000:3000'
+    env_file:
+      - db.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - database
+      - user-svc
+
+  user-svc:
+    container_name: user-svc
+    build:
+      context: .
+      dockerfile: apps/users/Dockerfile
+      target: build
+    command: yarn start:dev users
+    ports:
+      - '4000:4000'
+    env_file:
+      - db.env
+    volumes:
+      - .:/usr/src/app
+      - /usr/src/app/node_modules
+    depends_on:
+      - database
+
+  database:
+    image: mysql:latest
+    container_name: database
+    ports:
+      - '3306:3306'
+    env_file:
+      - db.env
+    volumes:
+      - mysql_nest_v:/var/lib/mysql
+    restart: always
+
+volumes:
+  mysql_nest_v:
+    name: mysql_nest_v
