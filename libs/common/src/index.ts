@@ -5,5 +5,3 @@ export * from './database/inject-repository.decorator';
 
 export * from './rmq/rmq.module';
 export * from './rmq/rmq.service';
-
-export * from './types/graphql';

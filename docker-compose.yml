@@ -17,7 +17,7 @@ services:
       - /usr/src/app/node_modules
     depends_on:
       - database
-      # - user-svc
+      - user-svc
 
   user-svc:
     container_name: user-svc
