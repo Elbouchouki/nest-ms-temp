@@ -1,4 +1,4 @@
-import { Controller, Get } from '@nestjs/common';
+import { Controller, Get, Logger } from '@nestjs/common';
 import { Prisma } from '@prisma/client';
 import { randomInt, randomUUID } from 'crypto';
 import { UsersService } from './users.service';

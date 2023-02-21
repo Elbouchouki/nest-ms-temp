@@ -1,37 +1,49 @@
-FROM node:alpine As dependencies
+##############################
+# BUILD FOR LOCAL DEVELOPMENT
+##############################
+
+FROM node:alpine As development
 
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-#  yarn.lock
+
 RUN yarn
 
+COPY . .
+
+RUN npx prisma generate
+
+
+#######################
+# BUILD FOR PRODUCTION
+#######################
 
 FROM node:alpine As build
 
 WORKDIR /usr/src/app
 
-COPY --from=dependencies /usr/src/app/node_modules ./node_modules
+COPY package.json yarn.lock ./
+
+COPY --from=development /usr/src/app/node_modules ./node_modules
+
 COPY . .
-RUN npx prisma generate
+
 RUN yarn build
-
-
-
-FROM node:alpine As production
 
 ARG NODE_ENV=production
 ENV NODE_ENV=${NODE_ENV}
 
-WORKDIR /usr/src/app
+RUN yarn install --immutable --immutable-cache --check-cache --prod
 
-COPY package.json yarn.lock ./
+#############
+# PRODUCTION
+#############
 
-RUN yarn --only=production
+FROM node:alpine As production
 
-COPY . .
+COPY --from=build /usr/src/app/node_modules ./node_modules
+COPY --from=build /usr/src/app/dist ./dist
 
-RUN yarn build
-
-CMD [ "node","dist/app/users/main" ]
+CMD [ "node","dist/apps/users/main" ]
 

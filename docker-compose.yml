@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: apps/gateway/Dockerfile
-      target: build
+      target: development
     command: yarn start:dev gateway
     ports:
       - '3000:3000'
@@ -17,14 +17,14 @@ services:
       - /usr/src/app/node_modules
     depends_on:
       - database
-      - user-svc
+      # - user-svc
 
   user-svc:
     container_name: user-svc
     build:
       context: .
       dockerfile: apps/users/Dockerfile
-      target: build
+      target: development
     command: yarn start:dev users
     ports:
       - '4000:4000'
