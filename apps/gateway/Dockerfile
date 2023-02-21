@@ -3,9 +3,8 @@ FROM node:alpine As dependencies
 WORKDIR /usr/src/app
 
 COPY package.json yarn.lock ./
-
+#  yarn.lock
 RUN yarn
-RUN npx prisma generate
 
 
 FROM node:alpine As build
@@ -14,7 +13,7 @@ WORKDIR /usr/src/app
 
 COPY --from=dependencies /usr/src/app/node_modules ./node_modules
 COPY . .
-
+RUN npx prisma generate
 RUN yarn build
 
 

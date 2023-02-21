@@ -2,7 +2,7 @@
   "name": "ens-bk",
   "version": "0.0.1",
   "description": "",
-  "author": "",
+  "author": "elbouchouki",
   "private": true,
   "license": "UNLICENSED",
   "scripts": {
@@ -19,13 +19,15 @@
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./apps/ens-bk/test/jest-e2e.json",
     "db:push": "dotenv -e ./db.env -- npx prisma db push --skip-generate",
-    "migrate:dev": "dotenv -e ./db.env -- npx prisma migrate dev --skip-generate",
+    "prisma:generate": "dotenv -e ./db.env -- npx prisma generate",
+    "prisma:migrate": "dotenv -e ./db.env -- npx prisma migrate dev --skip-generate",
     "docker:migrate": "docker-compose -f docker-compose.migrate.yml  up -d",
     "docker:migrate:clean": "docker-compose -f docker-compose.migrate.yml  down",
     "docker:db": "docker-compose -f docker-compose.db.yml  up -d",
     "docker:db:clean": "docker-compose -f docker-compose.db.yml  down",
     "docker:up": "docker-compose  up -d",
-    "docker:down": "docker-compose  down"
+    "docker:down": "docker-compose  down",
+    "docker:build": "docker-compose up --build"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
